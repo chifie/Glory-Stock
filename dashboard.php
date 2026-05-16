@@ -167,10 +167,10 @@ $categories = $pdo->query("SELECT * FROM categories ORDER BY name ASC")->fetchAl
                     <tr>
                         <th class="ps-4">SKU</th>
                         <th>Product Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Status</th>
+                        <th> Product Category</th>
+                        <th> Product Price</th>
+                        <th>Product Stock</th>
+                        <th>Product Status</th>
                         <th class="text-end pe-4">Actions</th>
                     </tr>
                 </thead>
