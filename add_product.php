@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product | Stock Manager Pro</title>
+    <title>Add Product | Stock Manager </title>
     <style>
         :root { --primary: #1e293b; --accent: #3b82f6; --success: #22c55e; --border: #e2e8f0; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
