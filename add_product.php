@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         input, select { 
             width: 100%; 
-            padding: 12px; 
+            padding: 13px; 
             border: 1px solid var(--border); 
             border-radius: 8px; 
             box-sizing: border-box; 
