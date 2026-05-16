@@ -29,7 +29,7 @@ $total_low_items = count($items);
         
         .brand-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
         .logo-placeholder { 
-            background: #2c3e50; color: white; width: 50px; height: 50px; 
+            background: #566013; color: white; width: 50px; height: 50px; 
             display: flex; align-items: center; justify-content: center; 
             font-weight: 900; font-size: 20px; border-radius: 10px; margin-right: 15px;
         }
