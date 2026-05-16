@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
 <nav class="navbar">
-    <div style="font-weight: 900;">📦 STOCK MANAGER PRO</div>
+    <div style="font-weight: 900;"> STOCK MANAGER PRO</div>
     <div class="nav-links">
         <a href="dashboard.php">Back to Dashboard</a>
     </div>
