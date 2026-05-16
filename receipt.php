@@ -43,7 +43,7 @@ if (!$sale) { echo "Receipt not found."; exit; }
 
         /* Top Color Accent */
         .receipt-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #476fcc 0%, #1e293b 100%);
             color: white;
             padding: 30px 20px;
             text-align: center;
