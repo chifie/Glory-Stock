@@ -11,7 +11,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-require_once 'db_connect.php'
+require_once 'db_connect.php';
 
 $message = "";
 
