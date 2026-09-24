@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -60,8 +60,8 @@ class AuthController extends Controller
     public function register(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'username' => ['required', 'string', 'max:50', 'unique:users,username'],
-            'password' => ['required', 'string', 'min:6'],
+            'username' => ['required', 'string', 'max:50', 'alpha_dash', 'unique:users,username'],
+            'password' => ['required', Password::min(6)],
             'role' => ['required', 'in:admin,staff'],
             'admin_key' => ['nullable', 'string'],
         ]);
@@ -73,7 +73,8 @@ class AuthController extends Controller
 
         $user = User::create([
             'username' => $validated['username'],
-            'password' => Hash::make($validated['password']),
+            // The 'hashed' cast on the User model hashes this automatically.
+            'password' => $validated['password'],
             'role' => $validated['role'],
         ]);
 
