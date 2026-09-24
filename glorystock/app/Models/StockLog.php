@@ -18,6 +18,11 @@ class StockLog extends Model
     public $timestamps = false;
     public const UPDATED_AT = null;
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'change_qty' => 'integer',
+    ];
+
     protected static function booted(): void
     {
         static::creating(function (StockLog $log) {
