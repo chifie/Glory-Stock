@@ -1,6 +1,6 @@
-# GloryStock — Laravel Edition
+# GloryStock — Laravel Edition (PostgreSQL)
 
-Inventory Management System & POS, converted from plain PHP to **Laravel MVC**.
+Inventory Management System & POS, converted from plain PHP to **Laravel MVC**, running on **PostgreSQL**.
 
 ## Structure (Legacy → Laravel)
 
@@ -37,13 +37,13 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-# Configure your database in .env (MySQL example):
-# DB_CONNECTION=mysql
+# Configure your database in .env (PostgreSQL example):
+# DB_CONNECTION=pgsql
 # DB_HOST=127.0.0.1
-# DB_PORT=3306
+# DB_PORT=5432
 # DB_DATABASE=inventory_db
-# DB_USERNAME=root
-# DB_PASSWORD=
+# DB_USERNAME=postgres
+# DB_PASSWORD=secret
 
 php artisan migrate --seed   # seeds legacy users/products/sales/expenses
 php artisan serve            # http://127.0.0.1:8000
