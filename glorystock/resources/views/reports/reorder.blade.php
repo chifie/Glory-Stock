@@ -4,83 +4,69 @@
     <meta charset="UTF-8">
     <title>Reorder Report | GloryStock</title>
     <style>
-        body { font-family: 'Inter', -apple-system, sans-serif; color: #1e293b; padding: 40px; line-height: 1.5; background: #fff; }
-        .brand-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
-        .logo-placeholder { background: #0f172a; color: white; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; border-radius: 10px; margin-right: 15px; }
-        .brand-text h1 { margin: 0; font-size: 24px; letter-spacing: -0.5px; color: #0f172a; }
-        .brand-text p { margin: 0; color: #64748b; font-size: 13px; }
-        .report-info { display: flex; justify-content: space-between; margin-bottom: 25px; }
-        .badge-warn { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 50px; }
-        th { text-align: left; padding: 12px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-        td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .qty-input-line { border-bottom: 1px solid #cbd5e1; width: 80px; display: inline-block; height: 20px; }
-        .status-danger { color: #e11d48; font-weight: 700; }
-        .footer { margin-top: 80px; display: flex; justify-content: space-between; }
-        .sig-box { border-top: 1px solid #94a3b8; width: 220px; text-align: center; font-size: 12px; padding-top: 10px; color: #64748b; }
         @media print { .no-print { display: none; } body { padding: 0; } }
     </style>
 </head>
-<body>
+<body class="bg-white p-10 leading-normal text-slate-800">
 
-<div class="no-print" style="background: #f8fafc; padding: 15px; margin: -40px -40px 40px -40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0;">
-    <span style="font-size: 13px; color: #64748b;">💡 Print this list to take to the wholesaler.</span>
-    <button onclick="window.print()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Print Now</button>
+<div class="no-print sticky top-0 z-10 -mx-10 -mt-10 mb-10 flex items-center justify-between border-b border-slate-200 bg-slate-50 px-10 py-4">
+    <span class="text-sm text-slate-500">&#128161; Print this list to take to the wholesaler.</span>
+    <button onclick="window.print()" class="rounded-md bg-blue-600 px-5 py-2.5 font-bold text-white hover:bg-blue-700 transition">Print Now</button>
 </div>
 
-<div class="brand-section">
-    <div style="display: flex; align-items: center;">
-        <div class="logo-placeholder">GS</div>
-        <div class="brand-text">
-            <h1>GLORYSTOCK</h1>
-            <p>Inventory Intelligence Report | {{ config('glorystock.store_city') }}</p>
+<div class="mb-8 flex items-center justify-between border-b-2 border-slate-100 pb-5">
+    <div class="flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-xl font-black text-white">GS</div>
+        <div>
+            <h1 class="m-0 text-2xl font-extrabold tracking-tight text-slate-900">GLORYSTOCK</h1>
+            <p class="m-0 text-[0.8rem] text-slate-500">Inventory Intelligence Report | {{ config('glorystock.store_city') }}</p>
         </div>
     </div>
-    <div style="text-align: right;">
-        <p style="margin:0; font-weight: bold; color: #1e293b;">REORDER SHEET</p>
-        <p style="margin:0; font-size: 12px; color: #64748b;">{{ now()->format('D, d M Y') }}</p>
+    <div class="text-right">
+        <p class="m-0 font-bold text-slate-800">REORDER SHEET</p>
+        <p class="m-0 text-xs text-slate-500">{{ now()->format('D, d M Y') }}</p>
     </div>
 </div>
 
-<div class="report-info">
-    <div class="badge-warn">⚠️ {{ $items->count() }} Items Need Restocking</div>
-    <div style="font-size: 12px; color: #64748b;">Prepared by: {{ auth()->user()->username }}</div>
+<div class="mb-6 flex items-center justify-between">
+    <div class="rounded-md bg-red-100 px-3 py-1.5 text-xs font-bold text-red-800">&#9888;&#65039; {{ $items->count() }} Items Need Restocking</div>
+    <div class="text-xs text-slate-500">Prepared by: {{ auth()->user()->username }}</div>
 </div>
 
-<table>
+<table class="mb-16 w-full border-collapse">
     <thead>
         <tr>
-            <th>SKU</th>
-            <th>Product Description</th>
-            <th>Category</th>
-            <th>Current Stock</th>
-            <th>Order Qty</th>
-            <th>Estimated Unit Cost</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">SKU</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">Product Description</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">Category</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">Current Stock</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">Order Qty</th>
+            <th class="border-b-2 border-slate-200 p-3 text-left text-[0.7rem] uppercase tracking-wider text-slate-500">Estimated Unit Cost</th>
         </tr>
     </thead>
     <tbody>
         @forelse ($items as $item)
-            <tr>
-                <td style="font-family: monospace; color: #64748b;">{{ $item->sku }}</td>
-                <td><strong>{{ $item->name }}</strong></td>
-                <td>{{ $item->category->name ?? 'General' }}</td>
-                <td><span class="status-danger">{{ $item->stock }} units left</span></td>
-                <td><span class="qty-input-line"></span></td>
-                <td style="color: #94a3b8;">{{ number_format((float) $item->price) }} /=</td>
+            <tr class="border-b border-slate-100 text-sm hover:bg-slate-50">
+                <td class="p-3 font-mono text-slate-500">{{ $item->sku }}</td>
+                <td class="p-3"><strong>{{ $item->name }}</strong></td>
+                <td class="p-3">{{ $item->category->name ?? 'General' }}</td>
+                <td class="p-3"><span class="font-bold text-rose-600">{{ $item->stock }} units left</span></td>
+                <td class="p-3"><span class="inline-block w-20 border-b border-slate-300">&nbsp;</span></td>
+                <td class="p-3 text-slate-400">{{ number_format((float) $item->price) }} /=</td>
             </tr>
         @empty
             <tr>
-                <td colspan="6" style="text-align: center; padding: 50px; color: #64748b;">
-                    ✅ All stock levels are healthy. Nothing to reorder!
+                <td colspan="6" class="p-12 text-center text-slate-500">
+                    &#9989; All stock levels are healthy. Nothing to reorder!
                 </td>
             </tr>
         @endforelse
     </tbody>
 </table>
 
-<div class="footer">
-    <div class="sig-box">Store Manager Signature</div>
-    <div class="sig-box">Authorized Approval</div>
+<div class="mt-20 flex justify-between">
+    <div class="w-56 border-t border-slate-400 pt-2 text-center text-xs text-slate-500">Store Manager Signature</div>
+    <div class="w-56 border-t border-slate-400 pt-2 text-center text-xs text-slate-500">Authorized Approval</div>
 </div>
 
 </body>

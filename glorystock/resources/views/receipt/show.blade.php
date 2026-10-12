@@ -3,35 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>GloryStock_Receipt_{{ $sale->id }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css'])
+    @endif
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap');
-        body { background-color: #f1f5f9; font-family: 'Inter', sans-serif; }
-        .receipt-card {
-            background: white; width: 90mm; margin: 40px auto; border-radius: 20px;
-            overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative;
-        }
-        .receipt-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: white; padding: 30px 20px; text-align: center;
-        }
-        .receipt-logo { height: 60px; width: auto; margin-bottom: 12px; background: white; padding: 8px; border-radius: 12px; }
-        .brand-title { font-weight: 800; letter-spacing: 2px; font-size: 1.5rem; margin: 0; }
-        .receipt-body { padding: 25px; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.75rem; color: #64748b; margin-bottom: 20px; }
-        .info-label { font-weight: 600; text-transform: uppercase; color: #94a3b8; display: block; }
-        .info-value { color: #1e293b; font-weight: 700; }
-        .item-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .item-table th { border-bottom: 2px solid #f1f5f9; padding: 10px 0; font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; }
-        .item-table td { padding: 12px 0; font-size: 0.9rem; }
-        .total-section { background: #f8fafc; border-radius: 12px; padding: 15px; margin-top: 10px; }
-        .grand-total { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 800; color: #0f172a; }
-        .footer-decor { text-align: center; padding: 20px; font-size: 0.75rem; color: #94a3b8; border-top: 1px dashed #e2e8f0; }
-        .receipt-card::after {
-            content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 10px;
-            background: linear-gradient(-45deg, #f1f5f9 5px, transparent 0), linear-gradient(45deg, #f1f5f9 5px, transparent 0);
-            background-size: 10px 10px;
-        }
         @media print {
             body { background: white; }
             .no-print { display: none !important; }
@@ -39,84 +15,84 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-900">
 
-<div class="no-print text-center mt-5">
-    <button onclick="window.print()" class="btn btn-dark shadow rounded-pill px-5 py-2 fw-bold">
-        <i class="fas fa-print me-2"></i> PRINT RECEIPT
+<div class="no-print text-center mt-8">
+    <button onclick="window.print()" class="rounded-full bg-slate-900 px-8 py-2 font-bold text-white shadow hover:bg-slate-800 transition">
+        &#128424;&#65039; PRINT RECEIPT
     </button>
     <div class="mt-3">
-        <a href="{{ route('pos.index') }}" class="text-decoration-none text-muted small">
-            <i class="fas fa-arrow-left me-1"></i> Back to POS Dashboard
+        <a href="{{ route('pos.index') }}" class="text-slate-500 text-sm hover:underline">
+            &larr; Back to POS Dashboard
         </a>
     </div>
 </div>
 
-<div class="receipt-card">
-    <div class="receipt-header">
-        <img src="{{ asset('logo.png') }}" alt="GloryStock" class="receipt-logo">
-        <h2 class="brand-title">GLORYSTOCK</h2>
-        <div class="small opacity-75">Inventory Management System</div>
+<div class="receipt-card relative w-[90mm] max-w-full mx-auto my-10 rounded-2xl overflow-hidden bg-white shadow-xl">
+    <div class="bg-gradient-to-br from-slate-900 to-slate-700 px-5 py-7 text-center text-white">
+        <img src="{{ asset('logo.png') }}" alt="GloryStock" class="mx-auto mb-3 h-14 w-auto rounded-xl bg-white p-2">
+        <h2 class="m-0 text-2xl font-extrabold tracking-widest">GLORYSTOCK</h2>
+        <div class="text-xs opacity-75">Inventory Management System</div>
     </div>
 
-    <div class="receipt-body">
-        <div class="info-grid">
+    <div class="p-6">
+        <div class="mb-5 grid grid-cols-2 gap-2.5 text-xs text-slate-500">
             <div>
-                <span class="info-label">Receipt Number</span>
-                <span class="info-value">#GS-{{ str_pad((string) $sale->id, 5, '0', STR_PAD_LEFT) }}</span>
+                <span class="block font-semibold uppercase text-slate-400">Receipt Number</span>
+                <span class="font-bold text-slate-800">#GS-{{ str_pad((string) $sale->id, 5, '0', STR_PAD_LEFT) }}</span>
             </div>
-            <div class="text-end">
-                <span class="info-label">Date & Time</span>
-                <span class="info-value">{{ $sale->sale_date->format('M d, Y | H:i') }}</span>
+            <div class="text-right">
+                <span class="block font-semibold uppercase text-slate-400">Date &amp; Time</span>
+                <span class="font-bold text-slate-800">{{ $sale->sale_date->format('M d, Y | H:i') }}</span>
             </div>
             <div>
-                <span class="info-label">Served By</span>
-                <span class="info-value">{{ strtoupper($sale->cashier_name ?? 'Staff') }}</span>
+                <span class="block font-semibold uppercase text-slate-400">Served By</span>
+                <span class="font-bold text-slate-800">{{ strtoupper($sale->cashier_name ?? 'Staff') }}</span>
             </div>
-            <div class="text-end">
-                <span class="info-label">Contact Store</span>
-                <span class="info-value">{{ config('glorystock.store_phone') }}</span>
+            <div class="text-right">
+                <span class="block font-semibold uppercase text-slate-400">Contact Store</span>
+                <span class="font-bold text-slate-800">{{ config('glorystock.store_phone') }}</span>
             </div>
         </div>
 
-        <table class="item-table">
+        <table class="w-full border-collapse mb-5">
             <thead>
                 <tr>
-                    <th class="text-start">Description</th>
-                    <th class="text-center">Qty</th>
-                    <th class="text-end">Amount</th>
+                    <th class="border-b-2 border-slate-100 py-2.5 text-left text-[0.7rem] uppercase text-slate-400">Description</th>
+                    <th class="border-b-2 border-slate-100 py-2.5 text-center text-[0.7rem] uppercase text-slate-400">Qty</th>
+                    <th class="border-b-2 border-slate-100 py-2.5 text-right text-[0.7rem] uppercase text-slate-400">Amount</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="fw-bold text-dark">{{ $sale->product->name }}</td>
-                    <td class="text-center text-muted">x{{ $sale->quantity }}</td>
-                    <td class="text-end fw-bold">{{ number_format((float) $sale->total_price) }} /=</td>
+                    <td class="py-3 text-sm font-bold text-slate-800">{{ $sale->product->name }}</td>
+                    <td class="py-3 text-center text-sm text-slate-500">x{{ $sale->quantity }}</td>
+                    <td class="py-3 text-right text-sm font-bold">{{ number_format((float) $sale->total_price) }} /=</td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="total-section">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="small text-muted fw-bold">SUBTOTAL</span>
-                <span class="small fw-bold">{{ number_format((float) $sale->total_price) }} /=</span>
+        <div class="rounded-xl bg-slate-50 p-4 mt-2.5">
+            <div class="mb-1 flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-500">SUBTOTAL</span>
+                <span class="text-xs font-bold">{{ number_format((float) $sale->total_price) }} /=</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="small text-muted fw-bold">TAX (VAT 0%)</span>
-                <span class="small fw-bold">0.00</span>
+            <div class="mb-2 flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-500">TAX (VAT 0%)</span>
+                <span class="text-xs font-bold">0.00</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center border-top pt-2">
-                <span class="fw-800 text-dark">GRAND TOTAL</span>
-                <span class="grand-total">{{ number_format((float) $sale->total_price) }} /=</span>
+            <div class="flex items-center justify-between border-t border-slate-200 pt-2">
+                <span class="font-extrabold text-slate-900">GRAND TOTAL</span>
+                <span class="font-mono text-xl font-extrabold text-slate-900">{{ number_format((float) $sale->total_price) }} /=</span>
             </div>
         </div>
     </div>
 
-    <div class="footer-decor">
-        <div class="fw-bold text-dark mb-1">Thank you for your business!</div>
+    <div class="border-t border-dashed border-slate-200 px-5 py-5 text-center text-xs text-slate-400">
+        <div class="mb-1 font-bold text-slate-800">Thank you for your business!</div>
         <div>Please visit us again for more quality stock.</div>
-        <div class="mt-3 text-uppercase fw-bold" style="letter-spacing: 1px; font-size: 10px;">
-            {{ config('glorystock.store_phone') }} • {{ config('glorystock.store_city') }} • GloryStock
+        <div class="mt-3 text-[0.6rem] font-bold uppercase tracking-widest">
+            {{ config('glorystock.store_phone') }} &#8226; {{ config('glorystock.store_city') }} &#8226; GloryStock
         </div>
     </div>
 </div>

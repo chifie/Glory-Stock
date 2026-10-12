@@ -7,25 +7,25 @@
 @endsection
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-    <div class="d-flex align-items-center">
-        <img src="{{ asset('logo.png') }}" alt="GloryStock" class="page-logo">
+<div class="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+    <div class="flex items-center gap-4">
+        <img src="{{ asset('logo.png') }}" alt="GloryStock" class="h-11 w-auto object-contain">
         <div>
-            <h3 class="fw-800 mb-0">Business Analytics</h3>
-            <p class="text-muted small mb-0">Financial overview for the last 6 months</p>
+            <h3 class="text-xl font-extrabold mb-0">Business Analytics</h3>
+            <p class="text-slate-500 text-sm mb-0">Financial overview for the last 6 months</p>
         </div>
     </div>
-    <button onclick="window.print()" class="btn btn-dark fw-bold rounded-pill px-4">
-        <i class="fas fa-print me-2"></i> Print Report
+    <button onclick="window.print()" class="rounded-full bg-slate-900 px-5 py-2 font-bold text-white hover:bg-slate-800 transition">
+        &#128424;&#65039; Print Report
     </button>
 </div>
 
-<div class="row g-4">
-    <div class="col-12">
-        <div class="card p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold m-0">Revenue vs Expenses</h5>
-                <div class="small text-muted">Real-time Performance Graph</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <div class="lg:col-span-12">
+        <div class="rounded-xl bg-white shadow-md p-5">
+            <div class="flex justify-between items-center mb-3">
+                <h5 class="font-bold mb-0">Revenue vs Expenses</h5>
+                <div class="text-sm text-slate-500">Real-time Performance Graph</div>
             </div>
             <div style="height: 350px;">
                 <canvas id="businessChart"></canvas>
@@ -33,29 +33,29 @@
         </div>
     </div>
 
-    <div class="col-md-7">
-        <div class="card p-4 h-100">
-            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Monthly Statement</h6>
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <thead>
-                        <tr class="small text-muted">
-                            <th>Month</th>
-                            <th>Revenue</th>
-                            <th>Expenses</th>
-                            <th>Net Profit</th>
+    <div class="lg:col-span-7">
+        <div class="rounded-xl bg-white shadow-md p-5 h-full">
+            <h6 class="text-xs font-bold uppercase text-slate-500 mb-4">Monthly Statement</h6>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left align-middle">
+                    <thead class="text-xs uppercase text-slate-400">
+                        <tr>
+                            <th class="py-2">Month</th>
+                            <th class="py-2">Revenue</th>
+                            <th class="py-2">Expenses</th>
+                            <th class="py-2">Net Profit</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-slate-100">
                         @foreach ($months as $index => $month)
                             @php($revenue = $revenueValues[$index])
                             @php($expense = $expenseValues[$index])
                             @php($profit = $revenue - $expense)
-                            <tr>
-                                <td class="fw-bold text-dark">{{ $month }}</td>
-                                <td class="text-success fw-semibold">{{ number_format($revenue) }} /=</td>
-                                <td class="text-danger">{{ number_format($expense) }} /=</td>
-                                <td class="fw-bold {{ $profit >= 0 ? 'text-primary' : 'text-danger' }}">
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-2.5 font-bold text-slate-900">{{ $month }}</td>
+                                <td class="py-2.5 font-semibold text-emerald-600">{{ number_format($revenue) }} /=</td>
+                                <td class="py-2.5 text-red-600">{{ number_format($expense) }} /=</td>
+                                <td class="py-2.5 font-bold {{ $profit >= 0 ? 'text-blue-600' : 'text-red-600' }}">
                                     {{ ($profit < 0 ? '-' : '+').number_format(abs($profit)) }} /=
                                 </td>
                             </tr>
@@ -66,21 +66,21 @@
         </div>
     </div>
 
-    <div class="col-md-5">
-        <div class="card p-4 h-100">
-            <h6 class="fw-bold mb-3 text-uppercase small text-muted">Best Selling Products</h6>
+    <div class="lg:col-span-5">
+        <div class="rounded-xl bg-white shadow-md p-5 h-full">
+            <h6 class="text-xs font-bold uppercase text-slate-500 mb-4">Best Selling Products</h6>
             @forelse ($topProducts as $item)
-                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                    <span class="fw-bold text-dark">{{ $item->name }}</span>
-                    <span class="badge bg-primary rounded-pill">{{ $item->total_sold }} Units Sold</span>
+                <div class="flex justify-between items-center mb-3 border-b border-slate-100 pb-2">
+                    <span class="font-bold text-slate-900">{{ $item->name }}</span>
+                    <span class="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">{{ $item->total_sold }} Units Sold</span>
                 </div>
             @empty
-                <p class="text-muted small">No sales data yet.</p>
+                <p class="text-sm text-slate-500">No sales data yet.</p>
             @endforelse
 
-            <div class="mt-4 pt-2">
-                <div class="alert alert-light border small text-center">
-                    <i class="fas fa-info-circle me-2"></i> These items generate the highest footfall for GloryStock.
+            <div class="mt-5">
+                <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-center text-sm text-slate-600">
+                    &#8505;&#65039; These items generate the highest footfall for GloryStock.
                 </div>
             </div>
         </div>

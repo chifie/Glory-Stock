@@ -3,79 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>Daily Close - {{ $today }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
-        .report-header { background: #1e293b; color: white; padding: 40px 0; border-radius: 0 0 25px 25px; }
-        .card { border: none; border-radius: 15px; }
-        .stat-val { font-size: 1.8rem; font-weight: 800; }
         @media print { .no-print { display: none; } body { background: white; } }
     </style>
 </head>
-<body>
+<body class="bg-slate-50">
 
-<div class="report-header text-center mb-5 shadow">
-    <h1 class="fw-800">DAILY CLOSE REPORT</h1>
+<div class="rounded-b-3xl bg-slate-800 py-10 text-center text-white shadow-md mb-8">
+    <h1 class="text-2xl font-extrabold tracking-wide">DAILY CLOSE REPORT</h1>
     <p class="opacity-75">Date: {{ now()->format('D, M j, Y') }}</p>
-    <div class="no-print mt-3">
-        <button onclick="window.print()" class="btn btn-light fw-bold px-4">🖨️ Print Summary</button>
-        <a href="{{ route('dashboard') }}" class="btn btn-outline-light px-4">Back to Dashboard</a>
+    <div class="no-print mt-3 flex items-center justify-center gap-3">
+        <button onclick="window.print()" class="rounded-lg bg-white px-5 py-2 font-bold text-slate-800 hover:bg-slate-100 transition">&#128424;&#65039; Print Summary</button>
+        <a href="{{ route('dashboard') }}" class="rounded-lg border border-white/50 px-5 py-2 font-semibold text-white hover:bg-white/10 transition">Back to Dashboard</a>
     </div>
 </div>
 
-<div class="container">
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card shadow-sm p-4 text-center">
-                <div class="text-muted small fw-bold mb-1 text-uppercase">Total Cash In</div>
-                <div class="stat-val text-success">{{ number_format($summary['total_cash']) }} /=</div>
-            </div>
+<div class="max-w-5xl mx-auto px-4 pb-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <div class="rounded-2xl bg-white p-6 text-center shadow-sm">
+            <div class="mb-1 text-xs font-bold uppercase text-slate-500">Total Cash In</div>
+            <div class="text-3xl font-extrabold text-emerald-600">{{ number_format($summary['total_cash']) }} /=</div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm p-4 text-center">
-                <div class="text-muted small fw-bold mb-1 text-uppercase">Transactions</div>
-                <div class="stat-val">{{ $summary['total_transactions'] }}</div>
-            </div>
+        <div class="rounded-2xl bg-white p-6 text-center shadow-sm">
+            <div class="mb-1 text-xs font-bold uppercase text-slate-500">Transactions</div>
+            <div class="text-3xl font-extrabold text-slate-900">{{ $summary['total_transactions'] }}</div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm p-4 text-center">
-                <div class="text-muted small fw-bold mb-1 text-uppercase">Items Sold</div>
-                <div class="stat-val">{{ $summary['total_items'] }}</div>
-            </div>
+        <div class="rounded-2xl bg-white p-6 text-center shadow-sm">
+            <div class="mb-1 text-xs font-bold uppercase text-slate-500">Items Sold</div>
+            <div class="text-3xl font-extrabold text-slate-900">{{ $summary['total_items'] }}</div>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 fw-bold">Today's Sales Audit Log</h5>
+    <div class="rounded-2xl bg-white shadow-sm overflow-hidden">
+        <div class="border-b border-slate-200 bg-white px-5 py-3">
+            <h5 class="mb-0 font-bold">Today's Sales Audit Log</h5>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left align-middle">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500">
                     <tr>
-                        <th class="ps-4">Time</th>
-                        <th>Product</th>
-                        <th>Qty</th>
-                        <th class="text-end pe-4">Total</th>
+                        <th class="pl-5 py-3">Time</th>
+                        <th class="py-3">Product</th>
+                        <th class="py-3">Qty</th>
+                        <th class="pr-5 py-3 text-right">Total</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-100">
                     @forelse ($dailySales as $sale)
-                        <tr>
-                            <td class="ps-4 text-muted">{{ $sale->sale_date->format('H:i') }}</td>
-                            <td class="fw-bold">{{ $sale->product_name }}</td>
-                            <td>{{ $sale->quantity }}</td>
-                            <td class="text-end pe-4 fw-bold">{{ number_format((float) $sale->total_price) }} /=</td>
+                        <tr class="hover:bg-slate-50">
+                            <td class="pl-5 py-3 text-slate-500">{{ $sale->sale_date->format('H:i') }}</td>
+                            <td class="py-3 font-bold">{{ $sale->product_name }}</td>
+                            <td class="py-3">{{ $sale->quantity }}</td>
+                            <td class="pr-5 py-3 text-right font-bold">{{ number_format((float) $sale->total_price) }} /=</td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="text-center py-5">No sales recorded today.</td></tr>
+                        <tr><td colspan="4" class="text-center py-10 text-slate-500">No sales recorded today.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="mt-5 text-center text-muted small pb-5">
+    <div class="mt-10 text-center text-sm text-slate-500 pb-6">
         Report Generated By: {{ auth()->user()->username }} | Time: {{ now()->format('H:i:s') }}
     </div>
 </div>

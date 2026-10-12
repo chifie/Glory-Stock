@@ -7,53 +7,51 @@
 @endsection
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-12">
-        <h4 class="fw-800 text-dark">Stock Movement History</h4>
-        <p class="text-muted">Every manual change and sale recorded for accountability.</p>
-    </div>
+<div class="mb-6">
+    <h4 class="text-lg font-extrabold text-slate-900">Stock Movement History</h4>
+    <p class="text-slate-500">Every manual change and sale recorded for accountability.</p>
 </div>
 
-<div class="card overflow-hidden">
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light">
+<div class="rounded-xl bg-white shadow-md overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left align-middle">
+            <thead class="bg-slate-50 text-xs uppercase text-slate-500">
                 <tr>
-                    <th class="ps-4">Timestamp</th>
-                    <th>Product Details</th>
-                    <th>Type</th>
-                    <th class="text-center">Quantity</th>
-                    <th>Reason / Reference</th>
+                    <th class="pl-5 py-3">Timestamp</th>
+                    <th class="py-3">Product Details</th>
+                    <th class="py-3">Type</th>
+                    <th class="py-3 text-center">Quantity</th>
+                    <th class="py-3">Reason / Reference</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-slate-100">
                 @forelse ($logs as $log)
                     @php($isPositive = $log->change_qty > 0)
-                    <tr>
-                        <td class="ps-4 small text-muted">
+                    <tr class="hover:bg-slate-50">
+                        <td class="pl-5 py-3 text-sm text-slate-500">
                             {{ $log->created_at->format('M d, Y') }}<br>
-                            <span class="fw-bold">{{ $log->created_at->format('H:i A') }}</span>
+                            <span class="font-bold">{{ $log->created_at->format('H:i A') }}</span>
                         </td>
-                        <td>
-                            <div class="fw-bold">{{ $log->product_name }}</div>
-                            <div class="text-muted small">{{ $log->sku }}</div>
+                        <td class="py-3">
+                            <div class="font-bold">{{ $log->product_name }}</div>
+                            <div class="text-xs text-slate-500">{{ $log->sku }}</div>
                         </td>
-                        <td>
+                        <td class="py-3">
                             @if ($isPositive)
-                                <span class="badge px-3 py-2" style="background: #dcfce7; color: #166534;">INCOMING</span>
+                                <span class="rounded-md bg-emerald-100 px-3 py-1.5 text-xs font-bold text-emerald-800">INCOMING</span>
                             @else
-                                <span class="badge px-3 py-2" style="background: #fee2e2; color: #991b1b;">OUTGOING</span>
+                                <span class="rounded-md bg-red-100 px-3 py-1.5 text-xs font-bold text-red-800">OUTGOING</span>
                             @endif
                         </td>
-                        <td class="text-center fw-800 fs-5 {{ $isPositive ? 'text-success' : 'text-danger' }}">
+                        <td class="py-3 text-center text-lg font-extrabold {{ $isPositive ? 'text-emerald-600' : 'text-red-600' }}">
                             {{ ($isPositive ? '+' : '').$log->change_qty }}
                         </td>
-                        <td>
-                            <span class="text-dark small fw-bold text-uppercase">{{ $log->reason }}</span>
+                        <td class="py-3">
+                            <span class="text-sm font-bold uppercase text-slate-900">{{ $log->reason }}</span>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="text-center py-5 text-muted">No stock movements found.</td></tr>
+                    <tr><td colspan="5" class="text-center py-10 text-slate-500">No stock movements found.</td></tr>
                 @endforelse
             </tbody>
         </table>

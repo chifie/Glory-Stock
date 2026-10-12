@@ -7,87 +7,85 @@
 @endsection
 
 @section('content')
-<div class="d-flex align-items-center mb-4 border-bottom pb-3">
-    <img src="{{ asset('logo.png') }}" alt="GloryStock" class="page-logo">
+<div class="flex items-center gap-4 mb-6 border-b border-slate-200 pb-4">
+    <img src="{{ asset('logo.png') }}" alt="GloryStock" class="h-11 w-auto object-contain">
     <div>
-        <h3 class="fw-800 mb-0">Expense Management</h3>
-        <p class="text-muted small mb-0">Track and record business outgoings</p>
+        <h3 class="text-xl font-extrabold mb-0">Expense Management</h3>
+        <p class="text-slate-500 text-sm mb-0">Track and record business outgoings</p>
     </div>
 </div>
 
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="card p-4">
-            <h5 class="fw-bold mb-4">Record New Expense</h5>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div class="lg:col-span-4">
+        <div class="rounded-xl bg-white shadow-md p-5">
+            <h5 class="font-bold mb-5">Record New Expense</h5>
 
             @if ($errors->any())
-                <div class="alert alert-danger py-2 small">❌ {{ $errors->first() }}</div>
+                <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">&#10060; {{ $errors->first() }}</div>
             @endif
 
             <form method="POST" action="{{ route('expenses.store') }}">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Category</label>
-                    <select name="category" class="form-select" required>
+                <div class="mb-4">
+                    <label for="category" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Category</label>
+                    <select name="category" id="category" class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" required>
                         @foreach (\App\Models\Expense::CATEGORIES as $categoryOption)
                             <option value="{{ $categoryOption }}" {{ old('category') === $categoryOption ? 'selected' : '' }}>{{ $categoryOption }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Amount (TZS)</label>
-                    <div class="input-group">
-                        <input type="number" name="amount" class="form-control" placeholder="e.g. 50000" step="0.01" min="0.01" value="{{ old('amount') }}" required>
-                        <span class="input-group-text bg-white small fw-bold">/=</span>
+                <div class="mb-4">
+                    <label for="amount" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Amount (TZS)</label>
+                    <div class="flex items-center rounded-lg border border-slate-300 focus-within:border-blue-500">
+                        <input type="number" name="amount" id="amount" class="w-full rounded-lg px-3 py-2 focus:outline-none" placeholder="e.g. 50000" step="0.01" min="0.01" value="{{ old('amount') }}" required>
+                        <span class="px-3 text-sm font-bold text-slate-400">/=</span>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Date</label>
-                    <input type="date" name="expense_date" class="form-control" value="{{ old('expense_date', now()->format('Y-m-d')) }}" required>
+                <div class="mb-4">
+                    <label for="expense_date" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Date</label>
+                    <input type="date" name="expense_date" id="expense_date" class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" value="{{ old('expense_date', now()->format('Y-m-d')) }}" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Description</label>
-                    <textarea name="description" class="form-control" rows="2" placeholder="What was this for?">{{ old('description') }}</textarea>
+                <div class="mb-5">
+                    <label for="description" class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">Description</label>
+                    <textarea name="description" id="description" rows="2" class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none" placeholder="What was this for?">{{ old('description') }}</textarea>
                 </div>
-                <button type="submit" class="btn btn-dark text-white w-100 py-3 shadow-sm fw-bold">
-                    <i class="fas fa-save me-2"></i> Save to Records
+                <button type="submit" class="w-full rounded-lg bg-slate-900 py-3 shadow-sm font-bold text-white hover:bg-slate-800 transition">
+                    &#128190; Save to Records
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="col-md-8">
-        <div class="card h-100 overflow-hidden">
-            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Recent Outgoings</h5>
-                <span class="badge bg-light text-dark border fw-bold px-3 py-2">{{ $expenses->count() }} Total Items</span>
+    <div class="lg:col-span-8">
+        <div class="rounded-xl bg-white shadow-md overflow-hidden h-full">
+            <div class="flex justify-between items-center border-b border-slate-200 bg-white px-5 py-3">
+                <h5 class="mb-0 font-bold">Recent Outgoings</h5>
+                <span class="rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs font-bold">{{ $expenses->count() }} Total Items</span>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-uppercase small text-muted">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left align-middle">
+                    <thead class="bg-slate-50 text-xs uppercase text-slate-500">
                         <tr>
-                            <th class="ps-4">Date</th>
-                            <th>Category</th>
-                            <th>Details</th>
-                            <th class="text-end pe-4">Amount</th>
+                            <th class="pl-5 py-3">Date</th>
+                            <th class="py-3">Category</th>
+                            <th class="py-3">Details</th>
+                            <th class="pr-5 py-3 text-right">Amount</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-slate-100">
                         @forelse ($expenses as $expense)
-                            <tr>
-                                <td class="ps-4 small text-muted">
-                                    <i class="far fa-calendar-alt me-1"></i> {{ $expense->expense_date->format('M d, Y') }}
-                                </td>
-                                <td>
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                            <tr class="hover:bg-slate-50">
+                                <td class="pl-5 py-3 text-sm text-slate-500">&#128197; {{ $expense->expense_date->format('M d, Y') }}</td>
+                                <td class="py-3">
+                                    <span class="rounded-full border border-red-200 bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-700">
                                         {{ $expense->category }}
                                     </span>
                                 </td>
-                                <td class="small text-dark fw-medium">{{ $expense->description }}</td>
-                                <td class="text-end pe-4 fw-bold text-dark">{{ number_format((float) $expense->amount) }} /=</td>
+                                <td class="py-3 text-sm text-slate-800 font-medium">{{ $expense->description }}</td>
+                                <td class="pr-5 py-3 text-right font-bold text-slate-900">{{ number_format((float) $expense->amount) }} /=</td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="text-center py-5 text-muted">No expenses recorded yet.</td></tr>
+                            <tr><td colspan="4" class="text-center py-10 text-slate-500">No expenses recorded yet.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
