@@ -14,6 +14,14 @@ class EnsureUserIsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user() || ! $request->user()->isAdmin()) {
+            // API requests (Bearer token / Accept: application/json) get a 403;
+            // web requests get the legacy redirect to the access-denied page.
+            $isApi = $request->expectsJson() && $request->is('api/*') || $request->bearerToken();
+
+            if ($isApi) {
+                return response()->json(['message' => 'Admin access required.'], 403);
+            }
+
             return redirect()->route('access.denied');
         }
 
