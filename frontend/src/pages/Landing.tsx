@@ -5,6 +5,7 @@ import Benefits from '../components/landing/Benefits';
 import HowItWorks from '../components/landing/HowItWorks';
 import CtaSection from '../components/landing/CtaSection';
 import Footer from '../components/landing/Footer';
+import AIAssistant from '../components/landing/AIAssistant';
 
 export default function Landing() {
   return (
@@ -18,6 +19,7 @@ export default function Landing() {
         <CtaSection />
       </main>
       <Footer />
+      <AIAssistant />
     </div>
   );
 }
