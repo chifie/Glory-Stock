@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer id="contact" className="scroll-mt-20 border-t border-slate-800 bg-slate-900">
+    <footer className="border-t border-slate-800 bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
@@ -19,7 +19,7 @@ export default function Footer() {
             <h3 className="text-sm font-bold uppercase tracking-wide text-white">Product</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li><a href="#features" className="text-slate-400 transition hover:text-white">Features</a></li>
-              <li><a href="#about" className="text-slate-400 transition hover:text-white">About</a></li>
+              <li><a href="#how-it-works" className="text-slate-400 transition hover:text-white">How it works</a></li>
               <li><Link to="/register" className="text-slate-400 transition hover:text-white">Get Started</Link></li>
             </ul>
           </div>

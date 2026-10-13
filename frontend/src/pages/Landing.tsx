@@ -1,3 +1,4 @@
+import { MotionConfig } from 'framer-motion';
 import LandingNavbar from '../components/landing/LandingNavbar';
 import Hero from '../components/landing/Hero';
 import Features from '../components/landing/Features';
@@ -9,17 +10,19 @@ import AIAssistant from '../components/landing/AIAssistant';
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
-      <LandingNavbar />
-      <main>
-        <Hero />
-        <Features />
-        <Benefits />
-        <HowItWorks />
-        <CtaSection />
-      </main>
-      <Footer />
-      <AIAssistant />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
+        <LandingNavbar />
+        <main>
+          <Hero />
+          <Features />
+          <Benefits />
+          <HowItWorks />
+          <CtaSection />
+        </main>
+        <Footer />
+        <AIAssistant />
+      </div>
+    </MotionConfig>
   );
 }
