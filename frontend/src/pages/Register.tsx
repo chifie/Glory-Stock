@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ApiError } from '../api';
 import { useAuth } from '../auth';
+import { homeForRole } from '../roles';
 
 export default function Register() {
   const { register } = useAuth();
@@ -19,7 +20,7 @@ export default function Register() {
     setBusy(true);
     try {
       await register(username, password, role, role === 'admin' ? adminKey : undefined);
-      navigate('/pos');
+      navigate(homeForRole(role));
     } catch (err) {
       setError(err instanceof ApiError ? err.firstError() : 'Registration failed. Try again.');
     } finally {

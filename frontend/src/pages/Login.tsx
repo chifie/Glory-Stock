@@ -1,11 +1,14 @@
 import { useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ApiError } from '../api';
 import { useAuth } from '../auth';
+import { homeForRole } from '../roles';
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('staff');
@@ -19,7 +22,7 @@ export default function Login() {
     setBusy(true);
     try {
       await login(username, password, role);
-      navigate('/pos');
+      navigate(from ?? homeForRole(role), { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.firstError() : 'Login failed. Try again.');
     } finally {

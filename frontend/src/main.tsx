@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { ShieldAlert } from 'lucide-react';
 import { AuthProvider, useAuth } from './auth';
+import { homeForRole } from './roles';
 import Layout from './components/Layout';
 import Categories from './pages/Categories';
 import DailyClose from './pages/DailyClose';
@@ -43,11 +45,17 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Public marketing landing page */}
-      <Route path="/" element={user ? <Navigate to="/pos" replace /> : <Landing />} />
+      <Route
+        path="/"
+        element={user ? <Navigate to={homeForRole(user.role)} replace /> : <Landing />}
+      />
 
       {/* Public */}
-      <Route path="/login" element={user ? <Navigate to="/pos" replace /> : <Login />} />
-      <Route path="/register" element={user ? <Navigate to="/pos" replace /> : <Register />} />
+      <Route path="/login" element={user ? <Navigate to={homeForRole(user.role)} replace /> : <Login />} />
+      <Route
+        path="/register"
+        element={user ? <Navigate to={homeForRole(user.role)} replace /> : <Register />}
+      />
 
       {/* Authenticated pages share the navbar layout */}
       <Route element={<RequireAuth />}>
@@ -97,7 +105,10 @@ function AppRoutes() {
       </Route>
 
       <Route path="/access-denied" element={<AccessDenied />} />
-      <Route path="*" element={<Navigate to={user ? '/pos' : '/'} replace />} />
+      <Route
+        path="*"
+        element={<Navigate to={user ? homeForRole(user.role) : '/'} replace />}
+      />
     </Routes>
   );
 }
@@ -105,14 +116,28 @@ function AppRoutes() {
 function AccessDenied() {
   const { user } = useAuth();
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl p-8 text-center shadow-md">
-        <h1 className="text-6xl mb-3">🚫</h1>
-        <h3 className="text-xl font-bold mb-2">Access Denied</h3>
-        <p className="text-slate-500 mb-6">Hello {user?.username}, you don&apos;t have Admin rights.</p>
-        <a href="/pos" className="inline-block rounded-lg bg-slate-900 px-5 py-2 font-semibold text-white hover:bg-slate-800 transition">
-          Back to POS
-        </a>
+    <div className="flex min-h-screen items-center justify-center bg-surface p-4">
+      <div className="w-full max-w-lg rounded-card border border-slate-200 bg-white p-8 text-center shadow-card">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-50 text-red-600">
+          <ShieldAlert className="h-7 w-7" aria-hidden />
+        </span>
+        <h1 className="mt-4 text-page font-extrabold tracking-tight text-ink-950">Access denied</h1>
+        <p className="mt-2 text-sm text-ink-500">
+          {user ? (
+            <>
+              Signed in as <strong className="text-ink-800">{user.username}</strong> ({user.role}).
+              This area requires an admin account.
+            </>
+          ) : (
+            'This area requires an admin account.'
+          )}
+        </p>
+        <Link
+          to={user ? homeForRole(user.role) : '/'}
+          className="mt-6 inline-block rounded-control bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
+        >
+          {user ? 'Back to my dashboard' : 'Go to homepage'}
+        </Link>
       </div>
     </div>
   );
