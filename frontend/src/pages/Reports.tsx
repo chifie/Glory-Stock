@@ -33,7 +33,7 @@ export default function Reports() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ChartCtor = window.Chart as any;
 
-    new ChartCtor(ctx, {
+    const chart = new ChartCtor(ctx, {
       type: 'line',
       data: {
         labels: data.months,
@@ -76,6 +76,9 @@ export default function Reports() {
         },
       },
     });
+
+    // Destroy on unmount/re-run so the canvas can be reused safely.
+    return () => chart.destroy();
   }, [data]);
 
   if (!data) return <p className="text-slate-500">Loading…</p>;
