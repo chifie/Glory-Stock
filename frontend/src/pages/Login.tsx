@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Eye, EyeOff, LogIn } from 'lucide-react';
 import { ApiError } from '../api';
 import { useAuth } from '../auth';
 import { homeForRole } from '../roles';
+import { Alert, Button, Field, inputCls } from '../components/ui';
 
 export default function Login() {
   const { login } = useAuth();
@@ -31,88 +33,86 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-6">
-          <img src="/logo.png" alt="Logo" className="h-16 w-auto mx-auto mb-4" />
-          <h2 className="text-2xl font-extrabold text-slate-900">GLORYSTOCK</h2>
-          <p className="text-slate-500 text-xs font-bold uppercase tracking-wide mt-1">
-            Sign in to your account
-          </p>
-          <div className="mx-auto mt-2 h-1 w-10 rounded bg-blue-500" />
-        </div>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 py-10">
+      <div className="w-full max-w-md">
+        <Link
+          to="/"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-ink-500 transition hover:text-brand-700"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to home
+        </Link>
 
-        {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-center text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={submit}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-              placeholder="Enter username"
-              required
-            />
+        <div className="rounded-card border border-slate-200 bg-white p-8 shadow-card">
+          <div className="mb-7 text-center">
+            <img src="/logo.png" alt="" className="mx-auto h-14 w-auto" />
+            <h1 className="mt-4 text-page font-extrabold tracking-tight text-ink-950">
+              Welcome back
+            </h1>
+            <p className="mt-1 text-sm text-ink-500">Sign in to your GloryStock account</p>
+            <div className="mx-auto mt-3 h-1 w-12 rounded-pill bg-brand-600" />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">
-              Password
-            </label>
-            <div className="relative flex items-center border border-slate-300 rounded-lg focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+          {error && <Alert tone="error">{error}</Alert>}
+
+          <form onSubmit={submit} className="space-y-4">
+            <Field label="Username" htmlFor="username">
               <input
-                id="password"
-                type={showPass ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg px-3 py-2 focus:outline-none"
-                placeholder="••••••••"
+                id="username"
+                type="text"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className={inputCls}
+                placeholder="e.g. john"
                 required
               />
-              <button type="button" onClick={() => setShowPass((v) => !v)} className="px-3 text-slate-400 hover:text-slate-600">
-                {showPass ? '🙈' : '👁'}
-              </button>
-            </div>
-          </div>
+            </Field>
 
-          <div className="mb-5">
-            <label htmlFor="role" className="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1">
-              Login As
-            </label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
-            >
-              <option value="staff">Staff / Cashier</option>
-              <option value="admin">Administrator</option>
-            </select>
-          </div>
+            <Field label="Password" htmlFor="password">
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPass ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`${inputCls} pr-11`}
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass((v) => !v)}
+                  aria-label={showPass ? 'Hide password' : 'Show password'}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 rounded-lg p-2 text-ink-400 transition hover:text-ink-800"
+                >
+                  {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </Field>
 
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full mb-4 rounded-lg bg-slate-900 py-2.5 font-bold uppercase text-white tracking-wide hover:bg-slate-800 transition disabled:opacity-50"
-          >
-            {busy ? 'Signing in…' : 'Sign In'}
-          </button>
-        </form>
+            <Field label="Sign in as" htmlFor="role">
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className={inputCls}
+              >
+                <option value="staff">Staff / Cashier</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </Field>
 
-        <div className="text-center border-t border-slate-200 pt-4">
-          <p className="text-slate-500 text-sm">
+            <Button type="submit" className="w-full" loading={busy} icon={LogIn}>
+              {busy ? 'Signing in…' : 'Sign in'}
+            </Button>
+          </form>
+
+          <p className="mt-6 border-t border-slate-200 pt-4 text-center text-sm text-ink-500">
             Don&apos;t have an account?{' '}
-            <Link to="/register" className="font-bold text-blue-600 hover:underline">
-              Register Here
+            <Link to="/register" className="font-bold text-brand-700 hover:underline">
+              Register here
             </Link>
           </p>
         </div>

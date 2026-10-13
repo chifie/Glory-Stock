@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { ArrowLeft, UserPlus } from 'lucide-react';
 import { ApiError } from '../api';
 import { useAuth } from '../auth';
 import { homeForRole } from '../roles';
+import { Alert, Button, Field, inputCls } from '../components/ui';
 
 export default function Register() {
   const { register } = useAuth();
@@ -29,94 +31,103 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-extrabold text-slate-900">Create Account</h2>
-          <p className="text-slate-500 text-sm">Join the GloryStock team</p>
-        </div>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 py-10">
+      <div className="w-full max-w-md">
+        <Link
+          to="/"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-ink-500 transition hover:text-brand-700"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to home
+        </Link>
 
-        {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={submit}>
-          <div className="mb-4">
-            <label htmlFor="username" className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
-              Choose Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-              required
-            />
+        <div className="rounded-card border border-slate-200 bg-white p-8 shadow-card">
+          <div className="mb-7 text-center">
+            <img src="/logo.png" alt="" className="mx-auto h-14 w-auto" />
+            <h1 className="mt-4 text-page font-extrabold tracking-tight text-ink-950">
+              Create your account
+            </h1>
+            <p className="mt-1 text-sm text-ink-500">Join the GloryStock team</p>
+            <div className="mx-auto mt-3 h-1 w-12 rounded-pill bg-brand-600" />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
-              Set Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-              required
-            />
-          </div>
+          {error && <Alert tone="error">{error}</Alert>}
 
-          <div className="mb-4">
-            <label htmlFor="role" className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1">
-              Your Role
-            </label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-            >
-              <option value="staff">Staff (Sales Only)</option>
-              <option value="admin">Administrator (Full Access)</option>
-            </select>
-          </div>
-
-          {role === 'admin' && (
-            <div className="mb-5">
-              <label htmlFor="admin_key" className="block text-xs font-bold text-red-600 uppercase tracking-wide mb-1">
-                Admin Secret Key
-              </label>
+          <form onSubmit={submit} className="space-y-4">
+            <Field label="Username" htmlFor="username">
               <input
-                id="admin_key"
-                type="password"
-                value={adminKey}
-                onChange={(e) => setAdminKey(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
-                placeholder="Enter security code"
+                id="username"
+                type="text"
+                autoComplete="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className={inputCls}
+                placeholder="Choose a username"
+                required
               />
-            </div>
-          )}
+            </Field>
 
-          <button
-            type="submit"
-            disabled={busy}
-            className="w-full mb-3 rounded-lg bg-slate-900 py-2.5 font-bold text-white hover:bg-slate-800 transition disabled:opacity-50"
-          >
-            {busy ? 'Creating…' : 'Register Account'}
-          </button>
+            <Field
+              label="Password"
+              htmlFor="password"
+              hint="At least 6 characters."
+            >
+              <input
+                id="password"
+                type="password"
+                autoComplete="new-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={inputCls}
+                placeholder="Set a password"
+                minLength={6}
+                required
+              />
+            </Field>
 
-          <p className="text-center text-sm text-slate-500">
+            <Field label="Role" htmlFor="role">
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className={inputCls}
+              >
+                <option value="staff">Staff (sales &amp; stock view)</option>
+                <option value="admin">Administrator (full access)</option>
+              </select>
+            </Field>
+
+            {role === 'admin' && (
+              <Field
+                label="Admin secret key"
+                htmlFor="admin_key"
+                hint="Required to create an administrator account."
+              >
+                <input
+                  id="admin_key"
+                  type="password"
+                  autoComplete="off"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  className={inputCls}
+                  placeholder="Enter the admin security key"
+                  required
+                />
+              </Field>
+            )}
+
+            <Button type="submit" className="w-full" loading={busy} icon={UserPlus}>
+              {busy ? 'Creating account…' : 'Create account'}
+            </Button>
+          </form>
+
+          <p className="mt-6 border-t border-slate-200 pt-4 text-center text-sm text-ink-500">
             Already have an account?{' '}
-            <Link to="/login" className="font-bold text-slate-900 hover:underline">
-              Login
+            <Link to="/login" className="font-bold text-brand-700 hover:underline">
+              Sign in
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
