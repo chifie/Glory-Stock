@@ -17,14 +17,21 @@ const buttonVariants: Record<ButtonVariant, string> = {
   ghost: 'text-ink-600 hover:bg-slate-100 hover:text-ink-950 disabled:hover:bg-transparent',
 };
 
+const buttonSizes = {
+  sm: 'px-2.5 py-1 text-xs gap-1.5',
+  md: 'px-4 py-2 text-sm',
+} as const;
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
+  size?: keyof typeof buttonSizes;
   loading?: boolean;
   icon?: LucideIcon;
 }
 
 export function Button({
   variant = 'primary',
+  size = 'md',
   loading = false,
   icon: Icon,
   className = '',
@@ -34,7 +41,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-control px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${buttonVariants[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-control font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${buttonSizes[size]} ${buttonVariants[variant]} ${className}`}
       disabled={disabled || loading}
       {...rest}
     >
